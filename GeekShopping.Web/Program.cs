@@ -15,7 +15,7 @@ builder.Services.AddAuthentication(options =>
     .AddCookie("Cookies", c => c.ExpireTimeSpan = TimeSpan.FromMinutes(10))
     .AddOpenIdConnect("oidc", options =>
     {
-        options.Authority = builder.Configuration["ServicesUrls:IdentityServer"];
+        options.Authority = builder.Configuration["ServiceUrls:IdentityServer"];
         options.GetClaimsFromUserInfoEndpoint = true;
         options.ClientId = builder.Configuration["MyAppConfig:ClientId"];
         options.ClientSecret = builder.Configuration["MyAppConfig:ClientSecret"];
@@ -24,7 +24,7 @@ builder.Services.AddAuthentication(options =>
         options.ClaimActions.MapJsonKey("sub", "sub", "sub");
         options.TokenValidationParameters.NameClaimType = "name";
         options.TokenValidationParameters.RoleClaimType = "role";
-        options.Scope.Add("geek_shopping");
+        options.Scope.Add(builder.Configuration["MyAppConfig:ClientId"]);
         options.SaveTokens = true;
     });
 
