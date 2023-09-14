@@ -16,6 +16,31 @@
             </div>
 
             <div class="card-body ">
+                <div class="">
+                    <div class="col-12 col-lg-4 p-1 text-center">
+                        <img src="@Model.ImageUrl" style="border-radius: 35px;" width="100%" class="rounded"  />
+                    </div>
+
+                    <div class="col-12 col-lg-8">
+                        <div class="row pl-3">
+                            <div class="col-12">
+                                <span class="badge badge-primary text-success p-3 border">
+                                    @Model.CategoryName
+                                </span>
+
+                                <h3 class="text-success">@Model.Name</h3>
+
+                                <p class="text-secondary">@Html.Raw(Model.Description)</p>
+                            </div>
+                        </div>
+
+                        <div class="row px-4">
+                            <input asp-for="Count" class="form-control" />
+
+                            <span asp-validation-for="Count" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="card-body row">
