@@ -1,7 +1,5 @@
 // Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
-
-
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -12,12 +10,12 @@ using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
-using Duende.IdentityServer.Test;
 using Microsoft.AspNetCore.Identity;
 using GeekShopping.IdentityServer.Model;
 using GeekShopping.IdentityServer.MainModule.Account;
 using System.Security.Claims;
 using GeekShopping.IdentityServer.Configuration;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace IdentityServerHost.Quickstart.UI
 {
@@ -298,8 +296,8 @@ namespace IdentityServerHost.Quickstart.UI
                     new Claim(JwtClaimTypes.WebSite, $"http://{model.Username}.com"),
                     new Claim(JwtClaimTypes.Role,"User") });
 
-                    var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
-                    var loginresult = await _signInManager.PasswordSignInAsync(model.Username, model.Password, false, lockoutOnFailure: true);
+                    AuthorizationRequest? context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+                    SignInResult? loginresult = await _signInManager.PasswordSignInAsync(model.Username, model.Password, false, lockoutOnFailure: true);
                     if (loginresult.Succeeded)
                     {
                         var checkuser = await _userManager.FindByNameAsync(model.Username);
