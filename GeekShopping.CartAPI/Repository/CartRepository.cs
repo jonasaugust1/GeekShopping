@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GeekShopping.CartAPI.Repository
 {
-    public class CardRepository : ICartRepository
+    public class CartRepository : ICartRepository
     {
         private readonly MySQLContext _context;
         private IMapper _mapper;
 
-        public CardRepository(MySQLContext context, IMapper mapper)
+        public CartRepository(MySQLContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
