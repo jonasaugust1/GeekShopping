@@ -42,6 +42,27 @@ namespace GeekShopping.CartAPI.Repository
             throw new NotImplementedException();
         }
 
+        private async Task Save(Cart cart)
+        {
+            cart.CartDetails.FirstOrDefault().CartHeaderId = cart.CartHeader.Id;
+            cart.CartDetails.FirstOrDefault().Product = null;
+
+            _context.CartDetails.Add(cart.CartDetails.FirstOrDefault());
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task Update(Cart cart, CartDetail cartDetail)
+        {
+            cart.CartDetails.FirstOrDefault().Product = null;
+            cart.CartDetails.FirstOrDefault().Count += cartDetail.Count;
+            cart.CartDetails.FirstOrDefault().Id = cartDetail.Id;
+            cart.CartDetails.FirstOrDefault().CartHeaderId = cartDetail.Id;
+
+            _context.CartDetails.Add(cart.CartDetails.FirstOrDefault());
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<CartVO> SaveOrUpdateCart(CartVO cartVO)
         {
             Cart cart = _mapper.Map<Cart>(cartVO);
@@ -63,12 +84,28 @@ namespace GeekShopping.CartAPI.Repository
                 _context.CartHeaders.Add(cartHeader);
                 await _context.SaveChangesAsync();
 
-                cart.CartDetails.FirstOrDefault().CartHeaderId = cart.CartHeader.Id;
-                cart.CartDetails.FirstOrDefault().Product = null;
-
-                _context.CartDetails.Add(cart.CartDetails.FirstOrDefault());
-                await _context.SaveChangesAsync();
+                await Save(cart);
             }
+            else
+            {
+                CartDetail cartDetail = await _context.CartDetails
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(p => p.ProductId == cartVO.CartDetails
+                    .FirstOrDefault().ProductId && 
+                    p.CartHeaderId == cartHeader.Id);
+
+                if (cartDetail == null)
+                {
+                    await Save(cart);
+                }
+                else
+                {
+                    await Update(cart, cartDetail);
+                }
+            }
+
+
+            return _mapper.Map<CartVO>(cart); 
         }
     }
 }
