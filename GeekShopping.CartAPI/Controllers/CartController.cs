@@ -18,9 +18,9 @@ namespace GeekShopping.CartAPI.Controllers
 
         [HttpGet("find-cart/{id}")]
         [Authorize]
-        public async Task<ActionResult<CartVO>> FindById(string userId)
+        public async Task<ActionResult<CartVO>> FindById(string id)
         {
-            CartVO cart = await _repository.FindCartByUserID(userId);
+            CartVO cart = await _repository.FindCartByUserID(id);
 
             if (cart == null) return NotFound();
 
