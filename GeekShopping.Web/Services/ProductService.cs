@@ -33,11 +33,11 @@ namespace GeekShopping.Web.Services
             return await response.ReadContentAs<ProductViewModel>();
         }
 
-        public async Task<ProductViewModel> CreateProduct(ProductViewModel productModel, string token)
+        public async Task<ProductViewModel> CreateProduct(ProductViewModel product, string token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            HttpResponseMessage response = await _client.PostAsJson(BasePath, productModel);
+            HttpResponseMessage response = await _client.PostAsJson(BasePath, product);
 
             if(response.IsSuccessStatusCode)
             return await response.ReadContentAs<ProductViewModel>();
@@ -45,11 +45,11 @@ namespace GeekShopping.Web.Services
             throw new Exception("Something went wrong when calling the API");
         }
 
-        public async Task<ProductViewModel> UpdateProduct(ProductViewModel productModel, string token)
+        public async Task<ProductViewModel> UpdateProduct(ProductViewModel product, string token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            HttpResponseMessage response = await _client.PutAsJson(BasePath, productModel);
+            HttpResponseMessage response = await _client.PutAsJson(BasePath, product);
 
             if (response.IsSuccessStatusCode)
                 return await response.ReadContentAs<ProductViewModel>();
