@@ -95,9 +95,11 @@ namespace GeekShopping.CartAPI.Repository
             }
         }
 
-        private async Task Save(Cart cart)
+        private async Task Save(Cart cart, CartHeader cartHeader = null)
         {
-            cart.CartDetails.FirstOrDefault().CartHeaderId = cart.CartHeader.Id;
+            long cartHeaderID = cartHeader != null ? cartHeader.Id : cart.CartHeader.Id;
+
+            cart.CartDetails.FirstOrDefault().CartHeaderId = cartHeaderID;
             cart.CartDetails.FirstOrDefault().Product = null;
 
             _context.CartDetails.Add(cart.CartDetails.FirstOrDefault());
@@ -120,8 +122,9 @@ namespace GeekShopping.CartAPI.Repository
         {
             Cart cart = _mapper.Map<Cart>(cartVO);
 
+            //Checks if the product is already saved in database if not then save
             Product? product = await _context.Products
-                .FirstOrDefaultAsync(p => p.Id == cartVO.CartDetails.FirstOrDefault().ProductId);
+                .FirstOrDefaultAsync(p => p.Id == cart.CartDetails.FirstOrDefault().ProductId);
 
             if (product == null)
             {
@@ -134,6 +137,7 @@ namespace GeekShopping.CartAPI.Repository
 
             if(cartHeader == null)
             {
+                //Create CartHeader and CartDetails
                 _context.CartHeaders.Add(cartHeader);
                 await _context.SaveChangesAsync();
 
@@ -141,15 +145,16 @@ namespace GeekShopping.CartAPI.Repository
             }
             else
             {
+                //Checks if CartDetails has same product
                 CartDetail cartDetail = await _context.CartDetails
                     .AsNoTracking()
-                    .FirstOrDefaultAsync(p => p.ProductId == cartVO.CartDetails
+                    .FirstOrDefaultAsync(p => p.ProductId == cart.CartDetails
                     .FirstOrDefault().ProductId && 
                     p.CartHeaderId == cartHeader.Id);
 
                 if (cartDetail == null)
                 {
-                    await Save(cart);
+                    Save(cart, cartHeader);
                 }
                 else
                 {
