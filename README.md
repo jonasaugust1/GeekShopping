@@ -34,7 +34,7 @@ The Login microservice is responsible for authentication and user management. It
 
 - **ASP.NET with Razor Pages**: The frontend of the application is developed using ASP.NET with Razor Pages, providing a user-friendly interface for interacting with the microservices.
 
-- *MySQL**: I used MySQL as database of the project.
+- **MySQL**: I used MySQL as database of the project.
 
 ## Getting Started
 
