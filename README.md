@@ -2,8 +2,9 @@
 Project to learn and practice microservices concepts
 
 I've created this project to practice microservices concepts. It is made with .Net framework and simulates an ecomerce of geek products. So far I created 3 mricro service 
-Products, Cart and Login Apis. For login i used Identity server with Duende framework [x] (https://duendesoftware.com/). For frontend I used Aspnet with razor pages.
+Products, Cart and Login Apis. For login i used Identity server with [Duende Framework][1]. For frontend I used Aspnet with razor pages.
 
+[1]:https://duendesoftware.com/ "Duende Framework"
 # GeekShopping
 
 Welcome to the GeekShopping project! This repository has been created as a platform to learn and practice microservices concepts. Built using the .NET framework, GeekShopping simulates an e-commerce platform specifically tailored for geeky products. The project currently consists of three microservices: Products, Cart, and Login APIs. Additionally, Identity Server with the Duend framework has been integrated for secure authentication, and the frontend is developed using ASP.NET with Razor Pages.
