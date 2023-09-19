@@ -26,18 +26,25 @@ namespace GeekShopping.Web.Controllers
             return View(await FindUserCart());
         }
 
+        public async Task<IActionResult> Remove(long id)
+        {
+            string? token = await HttpContext.GetTokenAsync("access_token");
+
+            bool response = await _cartService.RemoveFromCart(id, token);
+
+            if (response)
+            {
+                return RedirectToAction(nameof(CartIndex));
+            }
+
+            return View();
+        }
+
         private async Task<CartViewModel> FindUserCart()
         {
             string? token = await HttpContext.GetTokenAsync("access_token");
 
-            Claim? userIdClaim = User.Claims.FirstOrDefault(u => u.Type == "sub");
-
-            string userId = string.Empty;
-
-            if (userIdClaim != null)
-            {
-                userId = userIdClaim.Value;
-            }
+            string userId = GetUserId(token);
 
             CartViewModel? response = await _cartService.FindCartByUserId(userId, token);
 
@@ -50,6 +57,20 @@ namespace GeekShopping.Web.Controllers
             }
 
             return response;
+        }
+
+        private string GetUserId(string? token)
+        {
+            Claim? userIdClaim = User.Claims.FirstOrDefault(u => u.Type == "sub");
+
+            string userId = string.Empty;
+
+            if (userIdClaim != null)
+            {
+                userId = userIdClaim.Value;
+            }
+
+            return userId;
         }
     }
 }

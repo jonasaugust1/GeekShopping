@@ -55,7 +55,7 @@ namespace GeekShopping.CartAPI.Controllers
         {
             bool status = await _repository.RemoveFromCart(id);
 
-            if (status) return BadRequest();
+            if (!status) return BadRequest();
 
             return NoContent();
         }

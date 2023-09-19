@@ -83,10 +83,9 @@ namespace GeekShopping.CartAPI.Repository
                         .FirstOrDefaultAsync(c => c.Id == cartDetail.CartHeaderId);
 
                     _context.CartHeaders.Remove(cartHeaderToRemove);
-
-                    await _context.SaveChangesAsync();
                 }
 
+                await _context.SaveChangesAsync();
                 return true;
             }
             catch(Exception)
