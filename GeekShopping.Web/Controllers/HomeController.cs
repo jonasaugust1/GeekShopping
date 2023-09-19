@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace GeekShopping.Web.Controllers
 {
@@ -47,14 +48,20 @@ namespace GeekShopping.Web.Controllers
         {
             string? token = await HttpContext.GetTokenAsync("access_token");
 
+            Claim? userIdClaim = User.Claims.FirstOrDefault(u => u.Type == "sub");
+
+            string userId = string.Empty;
+
+            if (userIdClaim != null)
+            {
+                userId = userIdClaim.Value;
+            }
+
             CartViewModel cart = new()
             {
                 CartHeader = new CartHeaderViewModel
                 {
-                    UserId = User.Claims
-                    .Where(u => u.Type == "sub")?
-                    .FirstOrDefault()?
-                    .Value
+                    UserId = userId
                 }
             };
 
