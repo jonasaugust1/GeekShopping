@@ -43,7 +43,7 @@ namespace GeekShopping.Web.Controllers
         [HttpPost]
         [ActionName("Details")]
         [Authorize]
-        public async Task<IActionResult> DetailsPost(ProductViewModel product)
+        public async Task<IActionResult> DetailsPost(ProductViewModel model)
         {
             string? token = await HttpContext.GetTokenAsync("access_token");
 
@@ -53,29 +53,32 @@ namespace GeekShopping.Web.Controllers
                 {
                     UserId = User.Claims
                     .Where(u => u.Type == "sub")?
-                    .FirstOrDefault()?.Value,
-                },
+                    .FirstOrDefault()?
+                    .Value
+                }
             };
 
-            CartDetailViewModel cartDetail = new CartDetailViewModel
+            CartDetailViewModel cartDetail = new CartDetailViewModel()
             {
-                Count = product.Count,
-                ProductId = product.Id,
-                Product = await _productService.FindProductById(product.Id, token),
+                Count = model.Count,
+                ProductId = model.Id,
+                Product = await _productService.FindProductById(model.Id, token)
             };
 
-            List<CartDetailViewModel> cartDetails = new();
+            List<CartDetailViewModel> cartDetails = new()
+            {
+                cartDetail
+            };
 
-            cartDetails.Add(cartDetail);
+            cart.CartDetails = cartDetails;
 
             CartViewModel? response = await _cartService.AddItemToCart(cart, token);
 
-            if(response == null)
+            if (response != null)
             {
                 return RedirectToAction(nameof(Index));
             }
-
-            return View(product);
+            return View(model);
         }
 
         public IActionResult Privacy()

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GeekShopping.CartAPI.Migrations
 {
     [DbContext(typeof(MySQLContext))]
-    [Migration("20230915221510_AddCartDataTableOnDB")]
-    partial class AddCartDataTableOnDB
+    [Migration("20230919205946_AddCartTableToDatabase")]
+    partial class AddCartTableToDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,7 +55,6 @@ namespace GeekShopping.CartAPI.Migrations
                         .HasColumnName("id");
 
                     b.Property<string>("CouponCode")
-                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("coupon_code");
 

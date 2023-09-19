@@ -3,6 +3,7 @@ using GeekShopping.CartAPI.Config;
 using GeekShopping.CartAPI.Model.Context;
 using GeekShopping.CartAPI.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.Authority = builder.Configuration["MyAppConfig:Authority"];
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateAudience = false
+        };
+    });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
