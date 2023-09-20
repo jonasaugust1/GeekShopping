@@ -24,7 +24,7 @@ namespace GeekShopping.CartAPI.Repository
 
         public async Task<bool> ClearCart(string userID)
         {
-            CartHeader cartHeader = await _context.CartHeaders
+            CartHeader? cartHeader = await _context.CartHeaders
                        .FirstOrDefaultAsync(c => c.UserId == userID);
 
             if(cartHeader != null)
@@ -68,7 +68,7 @@ namespace GeekShopping.CartAPI.Repository
         {
             try
             {
-                CartDetail cartDetail = await _context.CartDetails
+                CartDetail? cartDetail = await _context.CartDetails
                     .FirstOrDefaultAsync(c => c.Id == cartDetailsId);
 
                 int total = _context.CartDetails.Where(
@@ -79,7 +79,7 @@ namespace GeekShopping.CartAPI.Repository
 
                 if(total == 1)
                 {
-                    CartHeader cartHeaderToRemove = await _context.CartHeaders
+                    CartHeader? cartHeaderToRemove = await _context.CartHeaders
                         .FirstOrDefaultAsync(c => c.Id == cartDetail.CartHeaderId);
 
                     _context.CartHeaders.Remove(cartHeaderToRemove);
