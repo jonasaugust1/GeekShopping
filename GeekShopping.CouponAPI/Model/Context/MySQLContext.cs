@@ -10,6 +10,6 @@ namespace GeekShopping.CouponAPI.Model.Base
 
         }
 
-        public DbSet<Product> Products { get; set;}
+        public DbSet<Coupon> Coupons { get; set;}
     }
 }

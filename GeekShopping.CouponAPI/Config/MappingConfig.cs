@@ -10,10 +10,7 @@ namespace GeekShopping.CouponAPI.Config
         {
             MapperConfiguration configuration = new(config =>
             {
-                config.CreateMap<ProductVO, Product>().ReverseMap();
-                config.CreateMap<CartVO, Cart>().ReverseMap();
-                config.CreateMap<CartHeaderVO, CartHeader>().ReverseMap();
-                config.CreateMap<CartDetailVO, CartDetail>().ReverseMap();
+                config.CreateMap<CouponVO, Coupon>().ReverseMap();
             });
 
             return configuration;
