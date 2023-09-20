@@ -67,3 +67,7 @@ Contributions are welcome! If you'd like to contribute to this project, please f
 5. Open a pull request, and describe the changes you've made.
 
 Feel free to reach out if you have any questions or need further assistance. Enjoy exploring and experimenting with microservices concepts in GeekShopping!
+
+## Acknowledgements
+
+This project is based from MicroService Architecture with .NET course teached by Leandro Costa
