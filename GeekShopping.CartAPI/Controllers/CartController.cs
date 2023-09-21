@@ -73,7 +73,7 @@ namespace GeekShopping.CartAPI.Controllers
             return Ok(response);
         }
         
-        [HttpPost("remove-coupon/{userId}")]
+        [HttpDelete("remove-coupon/{userId}")]
         [Authorize]
         public async Task<ActionResult<CartVO>> RemoveCoupon(string userId)
         {

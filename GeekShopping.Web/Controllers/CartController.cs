@@ -26,6 +26,42 @@ namespace GeekShopping.Web.Controllers
             return View(await FindUserCart());
         }
 
+        [HttpPost]
+        [ActionName("ApplyCoupon")]
+        [Authorize]
+        public async Task<IActionResult> ApplyCoupon(CartViewModel cart)
+        {
+            string? token = await HttpContext.GetTokenAsync("access_token");
+
+            bool response = await _cartService.ApplyCoupon(cart, token);
+
+            if (response)
+            {
+                return RedirectToAction(nameof(CartIndex));
+            }
+
+            return View();
+        }
+        
+        [HttpPost]
+        [ActionName("RemoveCoupon")]
+        [Authorize]
+        public async Task<IActionResult> RemoveCoupon()
+        {
+            string? token = await HttpContext.GetTokenAsync("access_token");
+
+            string userId = GetUserId(token);
+
+            bool response = await _cartService.RemoveCoupon(userId, token);
+
+            if (response)
+            {
+                return RedirectToAction(nameof(CartIndex));
+            }
+
+            return View();
+        }
+
         public async Task<IActionResult> Remove(long id)
         {
             string? token = await HttpContext.GetTokenAsync("access_token");
