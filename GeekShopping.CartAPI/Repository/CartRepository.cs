@@ -9,7 +9,7 @@ namespace GeekShopping.CartAPI.Repository
     public class CartRepository : ICartRepository
     {
         private readonly MySQLContext _context;
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public CartRepository(MySQLContext context, IMapper mapper)
         {
@@ -79,17 +79,27 @@ namespace GeekShopping.CartAPI.Repository
 
         public async Task<CartVO> FindCartByUserID(string userID)
         {
-            Cart cart = new()
+            try
             {
-                CartHeader = await _context.CartHeaders
-                .FirstOrDefaultAsync(c => c.UserId == userID),
-            };
+                CartHeader? cartHeader = await _context.CartHeaders
+                .FirstOrDefaultAsync(c => c.UserId == userID);
 
-            cart.CartDetails = _context.CartDetails
-                .Where(c => c.CartHeaderId == cart.CartHeader.Id)
-                .Include(c => c.Product);
+                Cart cart = new()
+                {
+                    CartHeader = cartHeader,
+                };
 
-            return _mapper.Map<CartVO>(cart);
+                cart.CartDetails = await _context.CartDetails
+                    .Where(c => c.CartHeaderId == cart.CartHeader.Id)
+                    .Include(c => c.Product)
+                    .ToListAsync();
+
+                return _mapper.Map<CartVO>(cart);
+            } 
+            catch (Exception ex)
+            {
+                return new CartVO();
+            }
         }
 
         public async Task<bool> RemoveFromCart(long cartDetailsId)

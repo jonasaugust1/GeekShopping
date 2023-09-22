@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GeekShopping.CartAPI.Migrations
 {
     [DbContext(typeof(MySQLContext))]
-    [Migration("20230919205946_AddCartTableToDatabase")]
-    partial class AddCartTableToDatabase
+    [Migration("20230921234435_AddCartTableToDataBase")]
+    partial class AddCartTableToDataBase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

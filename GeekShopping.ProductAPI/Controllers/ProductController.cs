@@ -9,7 +9,7 @@ namespace GeekShopping.ProductAPI.Controllers
     [Route("api/v1/[controller]")]
     public class ProductController : Controller
     {
-        private IProductRepository _repository;
+        private readonly IProductRepository _repository;
 
         public ProductController(IProductRepository repository)
         {

@@ -23,7 +23,7 @@ namespace GeekShopping.Web.Controllers
         [Authorize]
         public async Task<IActionResult> CartIndex()
         {
-            return View(await FindUserCart());
+            return View(await FindCartByUserId());
         }
 
         [HttpPost]
@@ -50,7 +50,7 @@ namespace GeekShopping.Web.Controllers
         {
             string? token = await HttpContext.GetTokenAsync("access_token");
 
-            string userId = GetUserId(token);
+            string userId = GetUserId();
 
             bool response = await _cartService.RemoveCoupon(userId, token);
 
@@ -76,11 +76,11 @@ namespace GeekShopping.Web.Controllers
             return View();
         }
 
-        private async Task<CartViewModel> FindUserCart()
+        private async Task<CartViewModel> FindCartByUserId()
         {
             string? token = await HttpContext.GetTokenAsync("access_token");
 
-            string userId = GetUserId(token);
+            string userId = GetUserId();
 
             CartViewModel? response = await _cartService.FindCartByUserId(userId, token);
 
@@ -95,7 +95,7 @@ namespace GeekShopping.Web.Controllers
             return response;
         }
 
-        private string GetUserId(string? token)
+        private string GetUserId()
         {
             Claim? userIdClaim = User.Claims.FirstOrDefault(u => u.Type == "sub");
 

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GeekShopping.CartAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class AddCartTableToDatabase : Migration
+    public partial class AddCartTableToDataBase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

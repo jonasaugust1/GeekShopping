@@ -9,7 +9,7 @@ namespace GeekShopping.CouponAPI.Controllers
     [Route("api/v1/[controller]")]
     public class CouponController : Controller
     {
-        private ICouponRepository _repository;
+        private readonly ICouponRepository _repository;
 
         public CouponController(ICouponRepository repository)
         {

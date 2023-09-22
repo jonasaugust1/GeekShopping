@@ -9,7 +9,7 @@ namespace GeekShopping.CartAPI.Controllers
     [Route("api/v1/[controller]")]
     public class CartController : ControllerBase
     {
-        private ICartRepository _repository;
+        private readonly ICartRepository _repository;
 
         public CartController(ICartRepository repository)
         {
