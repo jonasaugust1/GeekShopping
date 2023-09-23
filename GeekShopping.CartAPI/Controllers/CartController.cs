@@ -89,13 +89,14 @@ namespace GeekShopping.CartAPI.Controllers
         [Authorize]
         public async Task<ActionResult<CheckoutHeaderVO>> Checkout(CheckoutHeaderVO checkoutHeader)
         {
+            if(checkoutHeader?.UserId == null) return BadRequest();
+
             CartVO cart = await _repository.FindCartByUserID(checkoutHeader.UserId);
 
             if (cart == null) return NotFound();
 
             checkoutHeader.CartDetails = cart.CartDetails;
             checkoutHeader.DateTime = DateTime.Now;
-            checkoutHeader.CartTotalItens = cart.CartDetails.Count();
             //RabbitMQ comes here
 
             return Ok(checkoutHeader);
