@@ -83,5 +83,15 @@ namespace GeekShopping.CartAPI.Controllers
 
             return Ok(response);
         }
+
+        [HttpPost("checkout")]
+        [Authorize]
+        public async Task<ActionResult<CartVO>> Checkout()
+        {
+
+            if (!response) return NotFound();
+
+            return Ok(response);
+        }
     }
 }
