@@ -11,13 +11,16 @@ namespace GeekShopping.Web.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICartService _cartService;
+        private readonly ICouponService _couponService;
 
         public CartController(
             IProductService productService,
-            ICartService cartService)
+            ICartService cartService,
+            ICouponService couponService)
         {
             _productService = productService;
             _cartService = cartService;
+            _couponService = couponService;
         }
 
         [Authorize]
@@ -86,10 +89,14 @@ namespace GeekShopping.Web.Controllers
 
             if (response?.CartHeader != null)
             {
+                await ValidateCoupon(response, token);
+
                 foreach (var detail in response.CartDetails)
                 {
                     response.CartHeader.PurchaseAmount += (detail.Product.Price * detail.Count);
                 }
+
+                SetDiscount(response);
             }
 
             return response;
@@ -107,6 +114,33 @@ namespace GeekShopping.Web.Controllers
             }
 
             return userId;
+        }
+
+        private async Task<bool> ValidateCoupon(CartViewModel cart, string token)
+        {
+            if (!string.IsNullOrEmpty(cart.CartHeader.CouponCode))
+            {
+                CouponViewModel? coupon = await _couponService
+                    .GetCoupon(cart.CartHeader.CouponCode, token);
+
+                if (coupon?.CouponCode != null)
+                {
+                    cart.CartHeader.DiscountAmount = coupon.DiscountAmount;
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static void SetDiscount(CartViewModel cart)
+        {
+            decimal discountPercent = cart.CartHeader.DiscountAmount / 100;
+            decimal discountAmount = cart.CartHeader.PurchaseAmount * discountPercent;
+
+            cart.CartHeader.DiscountAmount = discountAmount;
+            cart.CartHeader.PurchaseAmount = cart.CartHeader.PurchaseAmount - discountAmount;
         }
     }
 }

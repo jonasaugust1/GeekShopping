@@ -116,7 +116,16 @@
                             style="font-size:21px;"
                         >
                             Purchase Amount: @Model.CartHeader.PurchaseAmount.ToString("C")
+                            <br/>
                         </span>
+
+                        @if(Model.CartHeader.DiscountAmount > 0)
+                        {
+                            <span class="text-success">
+                                Discount Amount: @Model.CartHeader.DiscountAmount.ToString("C")
+                                <br />
+                            </span>
+                        }
                     </div>
                 </div>
             </div>

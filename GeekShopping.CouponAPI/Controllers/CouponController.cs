@@ -16,6 +16,7 @@ namespace GeekShopping.CouponAPI.Controllers
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
+
         [HttpGet("{couponCode}")]
         [Authorize]
         public async Task<ActionResult<CouponVO>> GetCouponByCouponCode(string couponCode)
