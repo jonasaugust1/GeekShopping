@@ -99,7 +99,7 @@ namespace GeekShopping.CartAPI.Controllers
             if (cart == null) return NotFound();
 
             checkoutHeader.CartDetails = cart.CartDetails;
-            checkoutHeader.DateTime = DateTime.Now;
+            checkoutHeader.PurchaseDate = DateTime.Now;
 
             _rabbitMQSender.SendMessage(checkoutHeader, "checkout_queue");
 

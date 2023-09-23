@@ -11,7 +11,7 @@ namespace GeekShopping.CartAPI.Messages
         public decimal DiscountAmount { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime DateTime { get; set; }
+        public DateTime PurchaseDate { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string CardNumber { get; set; }
