@@ -65,6 +65,7 @@ namespace GeekShopping.Web.Controllers
             return View();
         }
 
+        [Authorize]
         public async Task<IActionResult> Remove(long id)
         {
             string? token = await HttpContext.GetTokenAsync("access_token");
@@ -77,6 +78,13 @@ namespace GeekShopping.Web.Controllers
             }
 
             return View();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Checkout()
+        {
+            return View(await FindCartByUserId());
         }
 
         private async Task<CartViewModel> FindCartByUserId()
