@@ -94,7 +94,8 @@ namespace GeekShopping.CartAPI.Controllers
             if (cart == null) return NotFound();
 
             checkoutHeader.CartDetails = cart.CartDetails;
-
+            checkoutHeader.DateTime = DateTime.Now;
+            checkoutHeader.CartTotalItens = cart.CartDetails.Count();
             //RabbitMQ comes here
 
             return Ok(checkoutHeader);
