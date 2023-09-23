@@ -2,7 +2,7 @@
 
 namespace GeekShopping.CartAPI.RabbitMQSender
 {
-    public interface IRabbitMQSender
+    public interface IRabbitMQMessageSender
     {
         void SendMessage(BaseMessage baseMessage, string queueName);
     }

@@ -12,9 +12,9 @@ namespace GeekShopping.CartAPI.Controllers
     public class CartController : ControllerBase
     {
         private readonly ICartRepository _repository;
-        private readonly IRabbitMQSender _rabbitMQSender;
+        private readonly IRabbitMQMessageSender _rabbitMQSender;
 
-        public CartController(ICartRepository repository, IRabbitMQSender rabbitMQSender)
+        public CartController(ICartRepository repository, IRabbitMQMessageSender rabbitMQSender)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _rabbitMQSender = rabbitMQSender ?? throw new ArgumentNullException(nameof(rabbitMQSender));

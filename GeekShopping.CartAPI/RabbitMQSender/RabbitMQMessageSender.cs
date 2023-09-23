@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace GeekShopping.CartAPI.RabbitMQSender
 {
-    public class RabbitMQMessageSender : IRabbitMQSender
+    public class RabbitMQMessageSender : IRabbitMQMessageSender
     {
         private readonly string _hostName;
         private readonly string _password;
