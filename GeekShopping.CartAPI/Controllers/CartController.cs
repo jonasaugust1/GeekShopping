@@ -11,12 +11,14 @@ namespace GeekShopping.CartAPI.Controllers
     [Route("api/v1/[controller]")]
     public class CartController : ControllerBase
     {
-        private readonly ICartRepository _repository;
+        private readonly ICartRepository _cartRepository;
+        private readonly ICouponRepository _couponRepository;
         private readonly IRabbitMQMessageSender _rabbitMQSender;
 
-        public CartController(ICartRepository repository, IRabbitMQMessageSender rabbitMQSender)
+        public CartController(ICartRepository cartRepository, ICouponRepository couponRepository, IRabbitMQMessageSender rabbitMQSender)
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _cartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
+            _couponRepository = couponRepository ?? throw new ArgumentNullException(nameof(couponRepository));
             _rabbitMQSender = rabbitMQSender ?? throw new ArgumentNullException(nameof(rabbitMQSender));
         }
 
@@ -24,7 +26,7 @@ namespace GeekShopping.CartAPI.Controllers
         [Authorize]
         public async Task<ActionResult<CartVO>> FindById(string id)
         {
-            CartVO cart = await _repository.FindCartByUserID(id);
+            CartVO cart = await _cartRepository.FindCartByUserID(id);
 
             if (cart == null) return NotFound();
 
@@ -35,7 +37,7 @@ namespace GeekShopping.CartAPI.Controllers
         [Authorize]
         public async Task<ActionResult<CartVO>> AddCart(CartVO cartVO)
         {
-            CartVO cart = await _repository.SaveOrUpdateCart(cartVO);
+            CartVO cart = await _cartRepository.SaveOrUpdateCart(cartVO);
 
             if (cart == null) return NotFound();
 
@@ -46,7 +48,7 @@ namespace GeekShopping.CartAPI.Controllers
         [Authorize]
         public async Task<ActionResult<CartVO>> UpdateCart(CartVO cartVO)
         {
-            CartVO cart = await _repository.SaveOrUpdateCart(cartVO);
+            CartVO cart = await _cartRepository.SaveOrUpdateCart(cartVO);
 
             if (cart == null) return NotFound();
 
@@ -57,7 +59,7 @@ namespace GeekShopping.CartAPI.Controllers
         [Authorize]
         public async Task<ActionResult> RemoveCart(long id)
         {
-            bool status = await _repository.RemoveFromCart(id);
+            bool status = await _cartRepository.RemoveFromCart(id);
 
             if (!status) return BadRequest();
 
@@ -68,7 +70,7 @@ namespace GeekShopping.CartAPI.Controllers
         [Authorize]
         public async Task<ActionResult<CartVO>> ApplyCoupon(CartVO cartVO)
         {
-            bool response = await _repository.ApplyCoupon(
+            bool response = await _cartRepository.ApplyCoupon(
                 cartVO.CartHeader.UserId, 
                 cartVO.CartHeader.CouponCode);
 
@@ -81,7 +83,7 @@ namespace GeekShopping.CartAPI.Controllers
         [Authorize]
         public async Task<ActionResult<CartVO>> RemoveCoupon(string userId)
         {
-            bool response = await _repository.RemoveCoupon(userId);
+            bool response = await _cartRepository.RemoveCoupon(userId);
 
             if (!response) return NotFound();
 
@@ -92,11 +94,24 @@ namespace GeekShopping.CartAPI.Controllers
         [Authorize]
         public async Task<ActionResult<CheckoutHeaderVO>> Checkout(CheckoutHeaderVO checkoutHeader)
         {
+            string? token = Request.Headers["Authorization"];
+
             if(checkoutHeader?.UserId == null) return BadRequest();
 
-            CartVO cart = await _repository.FindCartByUserID(checkoutHeader.UserId);
+            CartVO cart = await _cartRepository.FindCartByUserID(checkoutHeader.UserId);
 
             if (cart == null) return NotFound();
+
+            if(!string.IsNullOrEmpty(checkoutHeader.CouponCode))
+            {
+                CouponVO coupon = await _couponRepository
+                    .GetCouponByCouponCode(checkoutHeader.CouponCode, token);
+
+                if (checkoutHeader.DiscountAmount != coupon.DiscountAmount)
+                {
+                    return StatusCode(412);
+                }
+            }
 
             checkoutHeader.CartDetails = cart.CartDetails;
             checkoutHeader.PurchaseDate = DateTime.Now;
