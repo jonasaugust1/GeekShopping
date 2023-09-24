@@ -1,4 +1,4 @@
-﻿using GeekShopping.CartAPI.Repository;
+﻿using GeekShopping.OrderAPI.Repository;
 using GeekShopping.OrderAPI.Messages;
 using GeekShopping.OrderAPI.Model;
 using GeekShopping.OrderAPI.RabbitMQSender;
@@ -111,7 +111,7 @@ namespace GeekShopping.OrderAPI.MessageConsumer
 
             try
             {
-                _messageSender.SendMessage(payment, "orderpaymentprocessqueue");
+                _messageSender.SendMessage(payment, "order_payment_process_queue");
             }
             catch (Exception ex)
             {

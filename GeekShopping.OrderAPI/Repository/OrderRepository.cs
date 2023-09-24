@@ -1,9 +1,8 @@
 ﻿using GeekShopping.OrderAPI.Model;
 using GeekShopping.OrderAPI.Model.Context;
-using GeekShopping.OrderAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 
-namespace GeekShopping.CartAPI.Repository
+namespace GeekShopping.OrderAPI.Repository
 {
     public class OrderRepository : IOrderRepository
     {

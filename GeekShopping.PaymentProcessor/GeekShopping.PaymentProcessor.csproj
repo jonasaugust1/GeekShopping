@@ -1,9 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>GeekShopping.PaymentProcessor.Jonas</PackageId>
+    <Title>GeekShopping.PaymentProcessor</Title>
+    <Authors>Jonas Araujo</Authors>
+    <Description>Package that makes the payment processor in Geek Shopping Project</Description>
+    <Copyright>Rights owned by Jonas Araujo</Copyright>
+    <PackageIcon>favicon.png</PackageIcon>
+    <RepositoryUrl>https://github.com/jonasaugust1/GeekShopping/tree/master/GeekShopping.PaymentProcessor</RepositoryUrl>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\GeekShopping.Web\wwwroot\images\favicon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>

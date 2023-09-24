@@ -31,7 +31,7 @@ builder.Services.AddSwaggerGen(c =>
         Title = "GeekShopping.OrderAPI",
         Version = "01.00.00"
     });
-    c.EnableAnnotations();
+
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = @"Enter 'Bearer' [space] and your token",
