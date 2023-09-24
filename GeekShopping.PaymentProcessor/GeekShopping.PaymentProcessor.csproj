@@ -12,6 +12,7 @@
     <PackageIcon>favicon.png</PackageIcon>
     <RepositoryUrl>https://github.com/jonasaugust1/GeekShopping/tree/master/GeekShopping.PaymentProcessor</RepositoryUrl>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
