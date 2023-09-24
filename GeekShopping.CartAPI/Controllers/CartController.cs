@@ -105,7 +105,7 @@ namespace GeekShopping.CartAPI.Controllers
             if(!string.IsNullOrEmpty(checkoutHeader.CouponCode))
             {
                 CouponVO coupon = await _couponRepository
-                    .GetCouponByCouponCode(checkoutHeader.CouponCode, token);
+                    .GetCoupon(checkoutHeader.CouponCode, token);
 
                 if (checkoutHeader.DiscountAmount != coupon.DiscountAmount)
                 {
