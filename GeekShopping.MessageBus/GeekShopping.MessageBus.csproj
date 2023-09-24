@@ -4,6 +4,22 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Title>GeekShopping.MessageBus</Title>
+    <Authors>Jonas Araujo</Authors>
+    <Description>Package responsible to send messages to RabbitMQ queues</Description>
+    <PackageIcon>favicon.png</PackageIcon>
+    <RepositoryUrl>https://github.com/jonasaugust1/GeekShopping/tree/master/GeekShopping.MessageBus</RepositoryUrl>
+    <PackageTags>rabbitmq;messaging service</PackageTags>
+    <Copyright>Rights owned by Jonas Araujo</Copyright>
+    <PackageId>GeekShopping.MessageBus.Jonas</PackageId>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\GeekShopping.Web\wwwroot\images\favicon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
