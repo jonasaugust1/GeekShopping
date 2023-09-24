@@ -22,29 +22,23 @@ namespace GeekShopping.CartAPI.RabbitMQSender
 
         public void SendMessage(BaseMessage baseMessage, string queueName)
         {
-            ConnectionFactory factory = new()
+            if (ConnectionExists())
             {
-                HostName = _hostName,
-                UserName = _userName,
-                Password = _password,
-            };
+                using IModel? channel = _connection.CreateModel();
 
-            _connection = factory.CreateConnection();
+                if (channel != null)
+                {
+                    channel.QueueDeclare(queueName, false, false, false, arguments: null);
 
-            using IModel? channel = _connection.CreateModel();
+                    byte[] body = GetMessageAsByteArray(baseMessage);
 
-            if(channel != null)
-            {
-                channel.QueueDeclare(queueName, false, false, false, arguments: null);
-
-                byte[] body = GetMessageAsByteArray(baseMessage);
-
-                channel.BasicPublish(
-                    exchange: "",
-                    routingKey: queueName,
-                    basicProperties: null,
-                    body: body
-                    );
+                    channel.BasicPublish(
+                        exchange: "",
+                        routingKey: queueName,
+                        basicProperties: null,
+                        body: body
+                        );
+                }
             }
         }
 
@@ -59,6 +53,34 @@ namespace GeekShopping.CartAPI.RabbitMQSender
 
             byte[] body = Encoding.UTF8.GetBytes(json);
             return body;
+        }
+
+        private void CreateConnection()
+        {
+            try
+            {
+                ConnectionFactory factory = new()
+                {
+                    HostName = _hostName,
+                    UserName = _userName,
+                    Password = _password,
+                };
+
+                _connection = factory.CreateConnection();
+            }
+            catch (Exception ex)
+            {
+                Console.Write($"Error in Creating MQ Connection {ex.Message}");
+            }
+        }
+
+        private bool ConnectionExists()
+        {
+            if(_connection != null ) return true;
+
+            CreateConnection();
+
+            return _connection != null;
         }
     }
 }
