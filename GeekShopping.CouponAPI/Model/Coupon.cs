@@ -12,8 +12,8 @@ namespace GeekShopping.CouponAPI.Model
         [StringLength(30)]
         public string CouponCode { get; set; }
 
-        [Column("discount_amount")]
+        [Column("discount_percent")]
         [Required]
-        public decimal DiscountAmount { get; set; }
+        public decimal DiscountPercent { get; set; }
     }
 }

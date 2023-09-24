@@ -29,19 +29,16 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddHttpClient<IProductService, ProductService>(p =>
-{
-    p.BaseAddress = new Uri(builder.Configuration["ServiceUrls:ProductAPI"]);
-});
+    p.BaseAddress = new Uri(builder.Configuration["ServiceUrls:ProductAPI"])
+);
 
 builder.Services.AddHttpClient<ICartService, CartService>(c =>
-{
-    c.BaseAddress = new Uri(builder.Configuration["ServiceUrls:CartAPI"]);
-});
+    c.BaseAddress = new Uri(builder.Configuration["ServiceUrls:CartAPI"])
+);
 
 builder.Services.AddHttpClient<ICouponService, CouponService>(c =>
-{
-    c.BaseAddress = new Uri(builder.Configuration["ServiceUrls:CouponAPI"]);
-});
+    c.BaseAddress = new Uri(builder.Configuration["ServiceUrls:CouponAPI"])
+);
 
 var app = builder.Build();
 

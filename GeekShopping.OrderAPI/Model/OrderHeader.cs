@@ -15,6 +15,9 @@ namespace GeekShopping.OrderAPI.Model
         [Column("purchase_amount")]
         public decimal PurchaseAmount { get; set; }
 
+        [Column("discount_percent")]
+        public decimal DiscountPercent { get; set; }
+
         [Column("discount_amount")]
         public decimal DiscountAmount { get; set; }
 

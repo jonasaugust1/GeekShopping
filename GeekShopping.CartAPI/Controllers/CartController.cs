@@ -95,8 +95,9 @@ namespace GeekShopping.CartAPI.Controllers
         public async Task<ActionResult<CheckoutHeaderVO>> Checkout(CheckoutHeaderVO checkoutHeader)
         {
             string? token = Request.Headers["Authorization"];
+            token = token?.Replace("Bearer", "");
 
-            if(checkoutHeader?.UserId == null) return BadRequest();
+            if (checkoutHeader?.UserId == null) return BadRequest();
 
             CartVO cart = await _cartRepository.FindCartByUserID(checkoutHeader.UserId);
 
@@ -107,7 +108,7 @@ namespace GeekShopping.CartAPI.Controllers
                 CouponVO coupon = await _couponRepository
                     .GetCoupon(checkoutHeader.CouponCode, token);
 
-                if (checkoutHeader.DiscountAmount != coupon.DiscountAmount)
+                if (checkoutHeader.DiscountPercent != coupon.DiscountPercent)
                 {
                     return StatusCode(412);
                 }

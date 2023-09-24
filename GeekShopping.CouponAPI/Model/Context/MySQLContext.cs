@@ -18,13 +18,13 @@ namespace GeekShopping.CouponAPI.Model.Base
             {
                 Id = 1,
                 CouponCode = "JONAS_10",
-                DiscountAmount = 10
+                DiscountPercent = 10
             });
             modelBuilder.Entity<Coupon>().HasData(new Coupon
             {
                 Id = 2,
                 CouponCode = "MICROSERVICE_15",
-                DiscountAmount = 15
+                DiscountPercent = 15
             });
         }
     }

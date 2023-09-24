@@ -162,7 +162,7 @@ namespace GeekShopping.Web.Controllers
 
                 if (coupon?.CouponCode != null)
                 {
-                    cart.CartHeader.DiscountAmount = coupon.DiscountAmount;
+                    cart.CartHeader.DiscountPercent = coupon.DiscountPercent;
 
                     return true;
                 }
@@ -173,7 +173,7 @@ namespace GeekShopping.Web.Controllers
 
         private static void SetDiscount(CartViewModel cart)
         {
-            decimal discountPercent = cart.CartHeader.DiscountAmount / 100;
+            decimal discountPercent = cart.CartHeader.DiscountPercent / 100;
             decimal discountAmount = cart.CartHeader.PurchaseAmount * discountPercent;
 
             cart.CartHeader.DiscountAmount = discountAmount;

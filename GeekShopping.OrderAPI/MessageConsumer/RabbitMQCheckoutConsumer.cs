@@ -1,24 +1,25 @@
 ﻿using GeekShopping.CartAPI.Repository;
-using GeekShopping.MessageBus;
 using GeekShopping.OrderAPI.Messages;
 using GeekShopping.OrderAPI.Model;
+using GeekShopping.OrderAPI.RabbitMQSender;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Channels;
 
 namespace GeekShopping.OrderAPI.MessageConsumer
 {
     public class RabbitMQCheckoutConsumer : BackgroundService
     {
         private readonly OrderRepository _repository;
-        private IConnection _connection;
-        private IModel _channel;
+        private readonly IConnection _connection;
+        private readonly IModel _channel;
+        private readonly IRabbitMQMessageSender _messageSender;
 
-        public RabbitMQCheckoutConsumer(OrderRepository repository)
+        public RabbitMQCheckoutConsumer(OrderRepository repository, IRabbitMQMessageSender messageSender)
         {
             _repository = repository;
+            _messageSender = messageSender;
 
             ConnectionFactory factory = new()
             {
@@ -70,6 +71,7 @@ namespace GeekShopping.OrderAPI.MessageConsumer
                 CardNumber = checkoutHeader.CardNumber,
                 CouponCode = checkoutHeader.CouponCode,
                 CVV = checkoutHeader.CVV,
+                DiscountPercent = checkoutHeader.DiscountPercent,
                 DiscountAmount = checkoutHeader.DiscountAmount,
                 Email = checkoutHeader.Email,
                 ExpiryDate = checkoutHeader.ExpiryDate,
@@ -77,6 +79,7 @@ namespace GeekShopping.OrderAPI.MessageConsumer
                 PaymentStatus = false,
                 PhoneNumber = checkoutHeader.PhoneNumber,
                 PurchaseDate = checkoutHeader.PurchaseDate,
+                PurchaseAmount = checkoutHeader.PurchaseAmount,
             };
 
             foreach(CartDetailVO cartDetail in checkoutHeader.CartDetails)
@@ -94,6 +97,27 @@ namespace GeekShopping.OrderAPI.MessageConsumer
             }
 
             await _repository.AddOrder(orderHeader);
+
+            PaymentVO payment = new()
+            {
+                Name = orderHeader.FirstName + " " + orderHeader.LastName,
+                CardNumber = orderHeader.CardNumber,
+                CVV = orderHeader.CVV,
+                ExpiryDate = orderHeader.ExpiryDate,
+                OrderId = orderHeader.Id,
+                PurchaseAmount = orderHeader.PurchaseAmount,
+                Email = orderHeader.Email,
+            };
+
+            try
+            {
+                _messageSender.SendMessage(payment, "orderpaymentprocessqueue");
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error in Process Payment {ex.Message}");
+            }
         }
     }
 }
