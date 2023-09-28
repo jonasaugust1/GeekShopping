@@ -1,5 +1,5 @@
-﻿using GeekShopping.Email.Repository;
-using GeekShopping.Email.Messages;
+﻿using GeekShopping.Email.Messages;
+using GeekShopping.Email.Repository;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
@@ -9,13 +9,13 @@ namespace GeekShopping.Email.MessageConsumer
 {
     public class RabbitMQPaymentConsumer : BackgroundService
     {
-        private readonly OrderRepository _repository;
+        private readonly EmailRepository _repository;
         private readonly IConnection _connection;
         private readonly IModel _channel;
         private const string ExchangeName = "FanoutPaymentUpdateExchange";
         string queueName = "";
 
-        public RabbitMQPaymentConsumer(OrderRepository repository)
+        public RabbitMQPaymentConsumer(EmailRepository repository)
         {
             _repository = repository;
 
@@ -45,12 +45,12 @@ namespace GeekShopping.Email.MessageConsumer
             {
                 string content = Encoding.UTF8.GetString(evt.Body.ToArray());
 
-                UpdatePaymentResultVO? updatedPayment = JsonSerializer
-                .Deserialize<UpdatePaymentResultVO>(content);
+                UpdatePaymentResultMessage? message = JsonSerializer
+                .Deserialize<UpdatePaymentResultMessage>(content);
 
-                if(updatedPayment != null)
+                if(message != null)
                 {
-                    UpdatePaymentStatus(updatedPayment).GetAwaiter().GetResult();
+                    ProcessLogs(message).GetAwaiter().GetResult();
 
                     _channel.BasicAck(evt.DeliveryTag, false);
                 }
@@ -61,12 +61,11 @@ namespace GeekShopping.Email.MessageConsumer
             return Task.CompletedTask;
         }
 
-        private async Task UpdatePaymentStatus(UpdatePaymentResultVO updatedPayment)
+        private async Task ProcessLogs(UpdatePaymentResultMessage message)
         {
             try
             {
-                await _repository.UpdateOrderStatus(
-                    updatedPayment.OrderId, updatedPayment.Status);
+                await _repository.LogEmail(message);
             }
             catch (Exception ex)
             {
