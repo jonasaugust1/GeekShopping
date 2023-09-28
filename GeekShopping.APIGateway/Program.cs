@@ -1,4 +1,5 @@
 using Microsoft.IdentityModel.Tokens;
+using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,8 @@ builder.Services.AddAuthentication("Bearer")
             ValidateAudience = false
         };
     });
+
+builder.Services.AddOcelot();
 
 var app = builder.Build();
 
